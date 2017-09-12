@@ -1,0 +1,29 @@
+server {
+    server_name URL;
+    root /var/www/symfony/web;
+
+    location / {
+        try_files $uri @rewriteapp;
+    }
+
+    location @rewriteapp {
+        rewrite ^(.*)$ /APPFILE/$1 last;
+    }
+
+    location ~ ^/(app|app_dev|config)\.php(/|$) {
+        fastcgi_pass php-upstream;
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTPS off;
+    }
+}
+
+tcp_nodelay on;
+tcp_nopush on;
+
+client_body_buffer_size 50m;
+client_header_buffer_size 50m;
+client_max_body_size 50m;
+large_client_header_buffers 2 50m;
+
