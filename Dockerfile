@@ -9,6 +9,7 @@ ENV APPFILE app.php
 ADD symfony.conf /etc/nginx/conf.d/symfony.conf
 RUN rm /etc/nginx/conf.d/default.conf
 ADD cors_support /etc/nginx/cors_support
+ADD fastcgi-502.conf /etc/nginx/fastcgi-502.conf
 
 RUN echo "upstream php-upstream { server php:9000; }" > /etc/nginx/conf.d/upstream.conf
 
